@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Archive | 감정의 기록</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header>
+        <nav>
+            <div class="logo">EMOTION ARCHIVE</div>
+            <div class="date-now" id="currentDate"></div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 class="fade-in">당신의 문장을<br><span class="accent">감정으로</span> 아카이브합니다.</h1>
+            <p class="subtitle fade-in">인공지능이 분석하는 깊은 내면의 목소리</p>
+        </section>
+
+        <section class="analysis-section">
+            <div class="input-container fade-in">
+                <textarea id="textInput" placeholder="오늘의 기분이나 생각을 적어보세요..." maxlength="500"></textarea>
+                <div class="button-wrapper">
+                    <button id="analyzeBtn" class="premium-btn">
+                        <span>분석 시작하기</span>
+                        <div class="loader" id="loader"></div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="resultSection" class="result-section hidden">
+            <div class="result-card fade-in">
+                <div class="result-header">
+                    <span class="label">ANALYSIS RESULT</span>
+                    <h2 id="sentimentValue">Positive</h2>
+                </div>
+                <div class="result-body">
+                    <div class="confidence-box">
+                        <div class="confidence-label">신뢰도</div>
+                        <div class="progress-bar">
+                            <div id="confidenceBar" class="progress-fill"></div>
+                        </div>
+                        <div id="confidenceValue" class="confidence-num">98%</div>
+                    </div>
+                    <div class="reason-box">
+                        <div class="reason-label">분석 이유</div>
+                        <p id="reasonText">텍스트에서 느껴지는 전반적인 분위기가 긍정적이며, 희망적인 단어들이 사용되었습니다.</p>
+                    </div>
+                </div>
+                <div class="result-footer">
+                    <button id="resetBtn" class="text-btn">새로운 분석</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Emotion Archive. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
