@@ -13,21 +13,31 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Resolve static path relative to the project root
+const staticPath = path.join(process.cwd(), 'frontend');
+app.use(express.static(staticPath));
 
 // Clients
-let openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+let openai;
+try {
+    openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY || 'dummy',
+    });
+} catch (e) {
+    console.error('OpenAI Init Error:', e.message);
+}
 
 let supabase;
-if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.startsWith('http')) {
-    supabase = createClient(
-        process.env.SUPABASE_URL,
-        process.env.SUPABASE_ANON_KEY
-    );
-} else {
-    console.warn('Supabase URL is missing or invalid. DB logging will be disabled.');
+try {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.startsWith('http')) {
+        supabase = createClient(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_ANON_KEY
+        );
+    }
+} catch (e) {
+    console.error('Supabase Init Error:', e.message);
 }
 
 // Routes
@@ -83,10 +93,16 @@ app.post('/api/analyze', async (req, res) => {
     }
 });
 
-// Static files are handled by express.static above
-
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+// Static files fallback
+app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(staticPath, 'index.html'));
 });
+
+// Start server if not running as a Vercel function
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(port, () => {
+        console.log(`Server is running at http://localhost:${port}`);
+    });
+}
 
 module.exports = app;
